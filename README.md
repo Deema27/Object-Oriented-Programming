@@ -1,6 +1,6 @@
 # Object-Oriented-Programming
 
-This repository contains projects, assignments, and practice files completed throughout my **Object-Oriented Programming** course. The work in this repository demonstrates my understanding of core programming concepts and object-oriented design using Python.
+This repository contains projects, assignments, and practice files completed throughout my Object-Oriented Programming course. The work in this repository demonstrates my understanding of core programming concepts and object-oriented design using Python.
 
 ## Topics Covered
 
@@ -19,10 +19,6 @@ Throughout this course, I worked with concepts including:
 ## Purpose
 
 The purpose of this repository is to document my progress and learning throughout my Object-Oriented Programming course while building a stronger foundation in software development and Python programming.
-
-## Technologies Used
-
-- Python 3
 
 ## Repository Contents
 
