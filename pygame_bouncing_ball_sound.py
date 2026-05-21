@@ -1,4 +1,6 @@
-# pygame demo 4(c), one image, bounce around the window - with sound
+''' Description: 
+creates a simple pygame animation where an image (ball) moves 
+around the screen and bounces off walls with sound effects '''
 
 # 1 - Import packages
 import pygame
@@ -18,54 +20,63 @@ pygame.init()
 window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 clock = pygame.time.Clock()
  
-# 4 - Load assets: image(s), sound(s),  etc.
+# 4 - Load assets: image(s), sound(s), etc.
 ballImage = pygame.image.load('images/ball.png')
 bounceSound = pygame.mixer.Sound('sounds/boing.wav')
 pygame.mixer.music.load('sounds/background.mp3')
 pygame.mixer.music.play(-1, 0.0)
 
-
 # 5 - Initialize variables
+#Get rectangle for positioning and movement of ball
 ballRect = ballImage.get_rect()
+
+#Set max boundaries so ball stays inside window
 MAX_WIDTH = WINDOW_WIDTH - ballRect.width
 MAX_HEIGHT = WINDOW_HEIGHT - ballRect.height
+
+#Set random starting position for ball
 ballRect.left = random.randrange(MAX_WIDTH)
 ballRect.top = random.randrange(MAX_HEIGHT)
+
+#Set movement speed in x and y directions
 xSpeed = N_PIXELS_PER_FRAME
 ySpeed = N_PIXELS_PER_FRAME
  
-# 6 - Loop forever
+# 6 - Loop forever (main game loop)
 while True:
 
     # 7 - Check for and handle events
     for event in pygame.event.get():
-        # Clicked the close button? Quit pygame and end the program  
+
+        #Exit game when window is closed
         if event.type == pygame.QUIT:
-            # if it is quit the game
             pygame.quit()
             sys.exit()
     
-    # 8 - Do any "per frame" actions
+    # 8 - Update game state each frame
+
+    #Check collision with left/right walls and reverse x direction
     if (ballRect.left < 0) or (ballRect.right >= WINDOW_WIDTH):
-        xSpeed = -xSpeed  # reverse X direction
+        xSpeed = -xSpeed
         bounceSound.play()
 
+    #Check collision with top/bottom walls and reverse y direction
     if (ballRect.top < 0) or (ballRect.bottom >= WINDOW_HEIGHT):
-        ySpeed = -ySpeed  # reverse Y direction
+        ySpeed = -ySpeed
         bounceSound.play()
 
-    # Update the rectangle of the ball, based on the speed in two directions
+    #Move ball based on current speed
     ballRect.left = ballRect.left + xSpeed
     ballRect.top = ballRect.top + ySpeed
 
-    # 9 - Clear the window before drawing it again
+    # 9 - Clear screen
     window.fill(BLACK)
     
-    # 10 - Draw the window elements
+    # 10 - Draw ball
     window.blit(ballImage, ballRect)
 
-    # 11 - Update the window
+    # 11 - Update display
     pygame.display.update()
 
-    # 12 - Slow things down a bit
-    clock.tick(FRAMES_PER_SECOND)  # make pygame wait
+    # 12 - Control frame rate
+    clock.tick(FRAMES_PER_SECOND)
