@@ -1,67 +1,81 @@
+''' Description:
+Creates a simple animal shelter management system
+focused on adding and displaying cats using OOP and
+a pygame graphical interface.'''
+
 # 1 - Import packages and define classes
 import pygame, pygwidgets, sys
 from abc import ABC, abstractmethod
 
 
+#Abstract base class for all animals
 class Animal(ABC):
+
+    #Initialize common animal attributes
     def __init__(self, name, gender):
         self.name = name
         self.gender = gender
         self.hunger = 50
         self.energy = 50
 
+    #Increase energy and reduce hunger when eating
     def eat(self):
         self.energy += 10
         self.hunger -= 5
         print(self.name, 'just ate.')
-        
 
+    #Increase energy based on nap time and increase hunger
     def nap(self, minutes):
         self.energy = self.energy + (minutes * 2)
         self.hunger = self.hunger + minutes
-        print(f'{self.name} just took a {minutes}-minute nap.') 
+        print(f'{self.name} just took a {minutes}-minute nap.')
 
+    #Decrease energy and increase hunger when playing
     def play(self, minutes):
         self.energy -= (minutes * 2)
         self.hunger += minutes
-        print(f'{self.name} just played for {minutes} minutes.') 
+        print(f'{self.name} just played for {minutes} minutes.')
 
+    #Abstract method to be defined by subclasses
     @abstractmethod
     def speak(self):
         pass
 
 
-
-
+#Cat class inherits from Animal
 class Cat(Animal):
+
+    #Initialize cat-specific attributes
     def __init__(self, name, gender, breed, age):
         super().__init__(name, gender)
         self.breed = breed
         self.age = age
-    
+
+    #Display cat details in console
     def show(self):
-        print(f'Cat: {self.name} is a {self.gender} {self.breed}. '\
-              f'{self.name} is {self.age} year(s) old.')        
-        print(f'Energy level: {self.energy}.'\
+        print(f'Cat: {self.name} is a {self.gender} {self.breed}. '
+              f'{self.name} is {self.age} year(s) old.')
+        print(f'Energy level: {self.energy}.'
               f' Hunger level: {self.hunger}.\n')
 
+    #Cat sound behavior
     def speak(self):
         self.energy -= 2
         print(self.name, 'says: Meow!')
 
 
-
-
+#Dog class inherits from Animal (defined but not used in this version)
 class Dog(Animal):
+
     def __init__(self, name, gender, breed, age):
         super().__init__(name, gender)
         self.breed = breed
         self.age = age
-    
+
     def show(self):
-        print(f'Dog: {self.name} is a {self.gender} {self.breed}. '\
-              f'{self.name} is {self.age} year(s) old.')        
-        print(f'Energy level: {self.energy}.'\
+        print(f'Dog: {self.name} is a {self.gender} {self.breed}. '
+              f'{self.name} is {self.age} year(s) old.')
+        print(f'Energy level: {self.energy}.'
               f' Hunger level: {self.hunger}.\n')
 
     def speak(self):
@@ -69,13 +83,13 @@ class Dog(Animal):
         print(self.name, 'says: Ruff!')
 
 
-
-
+#Fish class inherits from Animal (defined but not fully used in GUI)
 class Fish(Animal):
+
     def show(self):
-        print(f'Fish: {self.name} is a {self.gender}. '\
-              f'{self.name} is {self.age} year(s) old.')        
-        print(f'Energy level: {self.energy}.'\
+        print(f'Fish: {self.name} is a {self.gender}. '
+              f'{self.name} is {self.age} year(s) old.')
+        print(f'Energy level: {self.energy}.'
               f' Hunger level: {self.hunger}.\n')
 
     def speak(self):
@@ -83,60 +97,67 @@ class Fish(Animal):
         print(self.name, 'says: Glub!')
 
 
-    
-
+#Animal shelter class manages all animals in the system
 class AnimalShelter():
+
+    #Initialize dictionary and ID counter
     def __init__(self):
         self.animalDict = {}
         self.nextId = 0
 
+    #Add a new animal to the shelter
     def add(self, name, gender, breed, age, pet_type):
         if pet_type == 'cat':
             self.animalDict[self.nextId] = Cat(name, gender, breed, age)
+
         elif pet_type == 'dog':
             self.animalDict[self.nextId] = Dog(name, gender, breed, age)
+
         elif pet_type == 'fish':
             self.animalDict[self.nextId] = Fish(name, gender)
-            
+
         self.nextId += 1
-        return self.nextId-1
-    
+        return self.nextId - 1
+
+    #Display one animal by ID
     def display(self, aNum):
         self.animalDict[aNum].show()
-        
+
+    #Display all animals in shelter
     def display_all(self):
         for animal in self.animalDict.values():
             animal.show()
 
+    #Feed all animals
     def feed_all(self):
         for animal in self.animalDict.values():
             animal.eat()
 
+    #Make all animals speak
     def speak_all(self):
         for animal in self.animalDict.values():
             animal.speak()
 
 
-# main code
+# ---------------- MAIN PROGRAM ---------------- #
 
-# 2 - Define constants
+#Define colors
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 BLUE = (0, 0, 255)
 RED = (255, 0, 0)
+
+#Set window size and FPS
 WINDOW_WIDTH = 640
 WINDOW_HEIGHT = 480
 FRAMES_PER_SECOND = 30
 
-# 3 - Initialize the world
+#Initialize pygame
 pygame.init()
 window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 clock = pygame.time.Clock()
- 
-# 4 - Load assets: image(s), sound(s),  etc.
-# None
 
-# 5 - Initialize variables
+#Create UI elements
 title_text = pygwidgets.DisplayText(window, (50, 50), 'Add a Cat to the Shelter', fontSize=40)
 
 name_title = pygwidgets.DisplayText(window, (50, 100), 'Name:', fontSize=30)
@@ -160,98 +181,109 @@ add_button = pygwidgets.TextButton(window, (340, 300), 'Add')
 show_button = pygwidgets.TextButton(window, (420, 420), 'Show all cats (in shell)')
 
 
-# Manually add the first cat, Garfield, to the shelter
+#Create shelter and add default cat
 oAnimalShelter = AnimalShelter()
 newId = oAnimalShelter.add('Garfield', 'male', 'Tabby', 5, 'cat')
 
-# 6 - Loop forever
+#Main loop runs continuously
 while True:
 
-    # 7 - Check for and handle events
+    #Handle events
     for event in pygame.event.get():
-        # Clicked the close button? Quit pygame and end program 
-        if event.type == pygame.QUIT:           
-            pygame.quit()  
+
+        #Exit program
+        if event.type == pygame.QUIT:
+            pygame.quit()
             sys.exit()
 
-    # 8 - Do any "per frame" actions
-
+        #Handle user input fields
         name_input.handleEvent(event)
-        name = name_input.getValue()
-
         breed_input.handleEvent(event)
-        breed = breed_input.getValue()
-
         age_input.handleEvent(event)
-        age = age_input.getValue()
 
         female_button.handleEvent(event)
-        female = female_button.getValue()
-
         male_button.handleEvent(event)
-        male = male_button.getValue()
-
         unknown_button.handleEvent(event)
-        unknown = unknown_button.getValue()
 
-        if female:
+        #Set gender based on selection
+        if female_button.getValue():
             gender = 'female'
-        elif male:
+        elif male_button.getValue():
             gender = 'male'
-        elif unknown:
+        else:
             gender = 'unknown'
 
+        #Add animal when button is clicked
         if add_button.handleEvent(event):
 
-            if len(name) == 0:
+            #Validate inputs
+            if len(name_input.getValue()) == 0:
                 status_text = pygwidgets.DisplayText(window, (40, 380), 'Name is required', fontSize=30, textColor=RED)
-            elif len(breed) == 0:
+
+            elif len(breed_input.getValue()) == 0:
                 status_text = pygwidgets.DisplayText(window, (40, 380), 'Breed is required', fontSize=30, textColor=RED)
-            elif len(age) == 0:
+
+            elif len(age_input.getValue()) == 0:
                 status_text = pygwidgets.DisplayText(window, (40, 380), 'Age is required', fontSize=30, textColor=RED)
-            elif not age.isdigit():
-               status_text = pygwidgets.DisplayText(window, (40, 380), 'Age must be an integer', fontSize=30, textColor=RED)
+
+            elif not age_input.getValue().isdigit():
+                status_text = pygwidgets.DisplayText(window, (40, 380), 'Age must be an integer', fontSize=30, textColor=RED)
+
             else:
-                ID = oAnimalShelter.add(name, gender, breed, age)
-                status_text = pygwidgets.DisplayText(window, (40, 380), f'Name: {name}   ID: {ID}', fontSize=30, textColor=WHITE)
-                
+                #Add cat to shelter
+                ID = oAnimalShelter.add(
+                    name_input.getValue(),
+                    gender,
+                    breed_input.getValue(),
+                    age_input.getValue(),
+                    'cat'
+                )
+
+                #Show success message
+                status_text = pygwidgets.DisplayText(
+                    window,
+                    (40, 380),
+                    f'Name: {name_input.getValue()}   ID: {ID}',
+                    fontSize=30,
+                    textColor=WHITE
+                )
+
+                #Clear input fields
                 name_input.clearText()
                 breed_input.clearText()
                 age_input.clearText()
 
+        #Display all animals in console
         if show_button.handleEvent(event):
-
             oAnimalShelter.display_all()
-        
-    
-    # 9 - Clear the window
+
+    #Clear screen
     window.fill(BLUE)
-    
-    # 10 - Draw all window elements
+
+    #Draw UI elements
     title_text.draw()
-    
+
     name_title.draw()
     name_input.draw()
-    
+
     gender_title.draw()
     female_button.draw()
     male_button.draw()
     unknown_button.draw()
-    
+
     breed_title.draw()
     breed_input.draw()
-    
+
     age_title.draw()
     age_input.draw()
-    
+
     status_text.draw()
 
     add_button.draw()
-
     show_button.draw()
-    
-    # 11 - Update the window
+
+    #Update display
     pygame.display.update()
 
-    # 12 - Slow things down a bit
-    clock.tick(FRAMES_PER_SECOND)  # make pygame wait
+    #Control frame rate
+    clock.tick(FRAMES_PER_SECOND)
