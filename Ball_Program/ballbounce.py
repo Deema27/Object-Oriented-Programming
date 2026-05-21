@@ -1,4 +1,6 @@
-# pygame demo 6(a) - using the Ball class, bounce one ball
+''' Description: 
+Demonstrates a single Ball object moving and bouncing
+inside a pygame window. '''
 
 # 1 - Import packages
 import pygame
@@ -23,28 +25,27 @@ clock = pygame.time.Clock()
 # 5 - Initialize variables
 oBall = Ball(window, WINDOW_WIDTH, WINDOW_HEIGHT)
 
-# 6 - Loop forever
+# 6 - Main loop
 while True:
     
-    # 7 - Check for and handle events
+    # 7 - Handle events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()          
 
-    # 8 - Do any "per frame" actions
-    oBall.update()  # tell the Ball to update itself
+    # 8 - Update ball each frame
+    oBall.update()
 
-   # 9 - Clear the window before drawing it again
+    # 9 - Clear screen
     window.fill(BLACK)
     
-    # 10 - Draw the window elements
-    oBall.draw()   # tell the Ball to draw itself
+    # 10 - Draw ball
+    oBall.draw()
 
-
-    # 11 - Update the window
+    # 11 - Update display
     pygame.display.update()
 
-    # 12 - Slow things down a bit
-    clock.tick(FRAMES_PER_SECOND)  # make pygame wait
+    # 12 - Frame rate control
+    clock.tick(FRAMES_PER_SECOND)
 
