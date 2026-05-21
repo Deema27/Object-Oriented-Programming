@@ -1,4 +1,6 @@
-# pygame demo 6(b) - using the Ball class, bounce many balls
+''' Description: 
+Creates multiple Ball objects and updates/draws them each frame
+so they bounce independently on the screen. '''
 
 # 1 - Import packages
 import pygame
@@ -23,34 +25,35 @@ clock = pygame.time.Clock()
 
 # 5 - Initialize variables
 ballList = []
-for oBall in range(0, N_BALLS):
-    # Each time through the loop, create a Ball object
-    oBall = Ball(window, WINDOW_WIDTH, WINDOW_HEIGHT)
-    ballList.append(oBall)  # append the new Ball to the list of Balls   
 
-# 6 - Loop forever
+# Create multiple Ball objects
+for oBall in range(0, N_BALLS):
+    # Each iteration creates a new Ball instance
+    oBall = Ball(window, WINDOW_WIDTH, WINDOW_HEIGHT)
+    ballList.append(oBall)
+
+# 6 - Main loop
 while True:
     
-    # 7 - Check for and handle events
+    # 7 - Handle events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()          
 
-    # 8 - Do any "per frame" actions
+    # 8 - Update all balls each frame
     for oBall in ballList:
-        oBall.update()  # tell each Ball to update itself
+        oBall.update()  # update movement/position of each Ball
 
-   # 9 - Clear the window before drawing it again
+    # 9 - Clear screen
     window.fill(BLACK)
     
-    # 10 - Draw the window elements
+    # 10 - Draw all balls
     for oBall in ballList:
-        oBall.draw()   # tell each Ball to draw itself
+        oBall.draw()
 
-    # 11 - Update the window
+    # 11 - Refresh display
     pygame.display.update()
 
-    # 12 - Slow things down a bit
-    clock.tick(FRAMES_PER_SECOND)  # make pygame wait
-
+    # 12 - Control frame rate
+    clock.tick(FRAMES_PER_SECOND)
