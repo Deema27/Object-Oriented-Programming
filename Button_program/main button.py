@@ -1,4 +1,6 @@
-# pygame demo 7  SimpleButton test
+''' Description: 
+creates a simple pygame window with a 
+clickable button that prints a message when clicked '''
 
 # 1 - Import packages
 import pygame
@@ -6,48 +8,44 @@ from pygame.locals import *
 from button import *
 import sys
 
-# Define constants
+# 2 - Define constants
 GRAY = (200, 200, 200)
 WINDOW_WIDTH = 400
 WINDOW_HEIGHT = 100
-FRAMES_PER_SECOND = 30 
+FRAMES_PER_SECOND = 30
 
-# 2 - Initialize the world
+# 3 - Initialize the world
 pygame.init()
 window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-clock = pygame.time.Clock()  
+clock = pygame.time.Clock()
 
-# 4 - Load assets: image(s), sounds, etc.
+# 4 - Load assets (images, sounds, etc.)
 
 # 5 - Initialize variables
-# Create an instance of SimpleButton
 oButton = SimpleButton(window, (150, 30),
                         'images/buttonUp.png',
                         'images/buttonDown.png')
 
-# 6 - Loop forever
+# 6 - Main loop
 while True:
 
-    # 7 - Check for and handle events
+    # 7 - Handle events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
 
-        # Pass the event to the button, see if it has been clicked on
         if oButton.handleEvent(event):
             print('User has clicked the button.')
 
-    # 8 - Do any "per frame" actions
-    
-    # 9 - Clear the window
-    window.fill(GRAY)
-    
-    # 10 - Draw all window elements
-    oButton.draw() # draw the button
+    # 8 - Per-frame updates
 
-    # 11 - Update the window
+    # 9 - Clear screen
+    window.fill(GRAY)
+
+    # 10 - Draw elements
+    oButton.draw()
+
+    # 11 - Update display
     pygame.display.update()
 
-    # 12 - Slow things down a bit
-    clock.tick(FRAMES_PER_SECOND)  # make pygame wait
