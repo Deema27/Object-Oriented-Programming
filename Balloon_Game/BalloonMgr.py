@@ -1,4 +1,7 @@
-#  Balloon manager
+''' Description: 
+Manages a collection of balloon objects in the balloon popping game.
+Handles creation, updating movement, collision detection (clicks),
+scoring, and removal of balloons when popped or missed. '''
 
 import pygame
 import random
@@ -7,61 +10,81 @@ import pygwidgets
 from BalloonConstants import *
 from Balloon import *
 
-#  BalloonMgr manages a list of Balloon objects
+# BalloonMgr class controls all balloons in the game
 class BalloonMgr():
     def __init__(self, window, maxWidth, maxHeight):
+        # Store window and boundaries for balloon movement/placement
         self.window = window
         self.maxWidth = maxWidth
         self.maxHeight = maxHeight
 
     def start(self):
+        # Reset game state and create a new set of balloons
         self.balloonList = []
         self.nPopped = 0
         self.nMissed = 0
         self.score = 0
 
+        # Create a random mix of balloon types
         for balloonNum in range(0, N_BALLOONS):
-            randomBalloonClass = random.choice((BalloonSmall, BalloonMedium, BalloonLarge, MegaBalloon))
-            oBalloon = randomBalloonClass(self.window, self.maxWidth, self.maxHeight, balloonNum)
+            randomBalloonClass = random.choice(
+                (BalloonSmall, BalloonMedium, BalloonLarge, MegaBalloon)
+            )
+            oBalloon = randomBalloonClass(
+                self.window,
+                self.maxWidth,
+                self.maxHeight,
+                balloonNum
+            )
             self.balloonList.append(oBalloon)
 
-
     def handleEvent(self, event):
+        # Handle mouse clicks on balloons
         if event.type == MOUSEBUTTONDOWN:
-            # Go 'reversed' so top-most balloon gets popped
+
+            # Check top-most balloons first (reverse order)
             for oBalloon in reversed(self.balloonList):
                 wasHit, nPoints = oBalloon.clickedInside(event.pos)
+
                 if wasHit:
-                    if nPoints > 0: # remove this balloon
+                    # Handle scoring and removal logic
+                    if nPoints > 0:
+
+                        # Special handling for Mega balloons
                         if oBalloon.size == 'Mega':
                             if oBalloon.isReadyToPop():
                                 self.balloonList.remove(oBalloon)
-                                self.nPopped = self.nPopped + 1
-                                self.score = self.score + nPoints
+                                self.nPopped += 1
+                                self.score += nPoints
                         else:
-                            
                             self.balloonList.remove(oBalloon)
-                            self.nPopped = self.nPopped + 1
-                            self.score = self.score + nPoints
-                    return  # no need to check others
+                            self.nPopped += 1
+                            self.score += nPoints
+
+                    return  # stop after first hit
 
     def update(self):
+        # Move balloons and remove any that leave the screen
         for oBalloon in self.balloonList:
             status = oBalloon.update()
+
             if status == BALLOON_MISSED:
-                # Balloon went off the top, remove it
                 self.balloonList.remove(oBalloon)
-                self.nMissed = self.nMissed + 1
+                self.nMissed += 1
 
     def getScore(self):
+        # Return current score
         return self.score
 
     def getCountPopped(self):
+        # Return number of balloons popped
         return self.nPopped
 
     def getCountMissed(self):
+        # Return number of balloons missed
         return self.nMissed
 
     def draw(self):
+        # Draw all balloons on the screen
         for oBalloon in self.balloonList:
             oBalloon.draw()
